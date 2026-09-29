@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play_time ✨ The Official PAAPS Bunk Experience</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Press+Start+2P&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <!-- Camera Shutter Flash Overlay -->
+    <div id="shutterFlash" class="shutter-flash"></div>
+
+    <!-- Glitter Canvas Overlay for Screen 9 -->
+    <canvas id="glitterCanvas"></canvas>
+
+    <!-- Giant Translucent Corner Cat Sticker (covers ~1/4 of page) -->
+    <div class="corner-cat-sticker" id="cornerCatSticker">
+        <img src="assets/kitten.jpg" alt="Innocent Translucent Cat Accomplice">
+    </div>
+
+    <!-- Floating Background Doodles & Notebook Stickers -->
+    <div class="doodle-container">
+        <svg class="floating-doodle" style="top: 10%; left: 5%; width: 48px; animation-duration: 9s;" viewBox="0 0 24 24" fill="#FFB4D6"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        <svg class="floating-doodle" style="top: 20%; right: 12%; width: 55px; animation-duration: 11s;" viewBox="0 0 24 24" fill="#B39DDB"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+        <svg class="floating-doodle" style="top: 75%; left: 8%; width: 52px; animation-duration: 13s;" viewBox="0 0 24 24" fill="#A8DADC"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        <svg class="floating-doodle" style="top: 82%; right: 10%; width: 44px; animation-duration: 10s;" viewBox="0 0 24 24" fill="#FFD166"><path d="M12 2l2.4 7.4h7.6l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4-6.2-4.5h7.6z"/></svg>
+        <svg class="floating-doodle" style="top: 50%; left: 3%; width: 40px; animation-duration: 14s;" viewBox="0 0 24 24" fill="#FF85A1"><circle cx="12" cy="12" r="10"/></svg>
+        <svg class="floating-doodle" style="top: 60%; right: 4%; width: 46px; animation-duration: 12s;" viewBox="0 0 24 24" fill="#9BF6FF"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+    </div>
+
+    <!-- Top HUD Bar -->
+    <header class="top-hud">
+        <div class="hud-pill">
+            <span>🎮</span>
+            <span>Play_time</span>
+            <span style="opacity: 0.4;">|</span>
+            <span id="hudScreenText">Phase 1/9</span>
+        </div>
+        
+        <div class="hud-controls-group">
+            <div class="progress-track">
+                <div id="progressFill" class="progress-fill"></div>
+            </div>
+
+            <!-- Dark / Light Mode Slider -->
+            <div class="theme-switch-wrapper" title="Toggle Light / Dark Mode">
+                <span>☀️</span>
+                <label class="theme-switch">
+                    <input type="checkbox" id="themeToggleCheckbox">
+                    <span class="slider-round"></span>
+                </label>
+                <span>🌙</span>
+            </div>
+
+            <!-- Sound Mute/Unmute -->
+            <button id="soundToggleBtn" class="hud-btn" title="Toggle Sound">🔊</button>
+        </div>
+    </header>
+
+    <!-- Main Game Viewport -->
+    <main class="game-viewport">
+
+        <!-- ===============================================================
+             SCREEN 1: THE ATTEND TRAP (PERFECTLY ALIGNED WITH ARENA)
+             =============================================================== -->
+        <section id="screen-1" class="game-screen active">
+            <div id="cardScreen1" class="sticker-card lavender-theme">
+                <div class="question-cat-header">
+                    <div class="question-cat-avatar">
+                        <img src="assets/kitten.jpg" alt="Sneaky Bunk Cat">
+                    </div>
+                    <div class="question-header-text">
+                        <div class="card-badge">✨ ATTENDANCE TRAP</div>
+                        <h1 class="card-title">Hey there! Quick question...<br>Do you really want to be attending this class right now? 😏</h1>
+                    </div>
+                </div>
+
+                <p class="card-subtitle">Choose very carefully... your fate and attendance balance lie in the balance!</p>
+
+                <!-- Runaway Arena with safe clearance -->
+                <div id="runawayArena" class="runaway-arena">
+                    <!-- Stationary Glowing Green 'No' Button -->
+                    <button id="btnNoScreen1" class="btn-fun btn-green-pulse">
+                        <span>🙅‍♂️</span>
+                        <span>No, Absolutely Not!</span>
+                    </button>
+
+                    <!-- Runaway Evasive 'Yes' Button (Smooth slower glide) -->
+                    <div id="runawayContainer" class="runaway-container">
+                        <div id="evasionSpeech" class="evasion-speech">Are you sure about your life choices? 🤔</div>
+                        <button id="runawayYesBtn" class="btn-fun btn-runaway">
+                            <span>🤓</span>
+                            <span>Yes, I love lectures</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             SCREEN 2: THE BUNK PITCH (ALIGNED WITH SCREEN 1)
+             =============================================================== -->
+        <section id="screen-2" class="game-screen">
+            <div class="sticker-card" style="background: var(--card-pink);">
+                <div class="card-badge">😼 OPERATION SNEAK OUT</div>
+                
+                <div class="kitten-card-layout">
+                    <div class="kitten-text-side">
+                        <h1 class="card-title">I knew it! 😉<br>So... want to bunk...???</h1>
+                        <p class="card-subtitle">Look at those eyes! You can't say no to this adorable accomplice. One click and freedom is ours!</p>
+                        
+                        <div class="btn-group" style="justify-content: flex-start; margin-top: 25px;">
+                            <button id="btnBunkYes" class="btn-fun btn-pink-celebrate">
+                                <span>🎉</span>
+                                <span>YES! Let's Bunk!</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="kitten-photo-wrapper">
+                        <img src="assets/kitten.jpg" alt="Innocent kitten accomplice" class="kitten-photo">
+                        <div class="kitten-tag">Chief Bunking Co-Pilot 🐾</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Welcome Modal Pop-up -->
+            <div id="welcomeModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(45, 34, 59, 0.5); backdrop-filter: blur(8px); z-index: 999; justify-content: center; align-items: center;">
+                <div class="sticker-card yellow-theme" style="max-width: 480px; transform: scale(1.05); min-height: auto;">
+                    <div style="font-size: 3.5rem; margin-bottom: 10px;">🎊</div>
+                    <h2 class="card-title" style="font-size: 1.8rem; margin-bottom: 12px;">WELCOME TO THE CLUB!</h2>
+                    <p class="card-subtitle" style="margin-bottom: 0;">You passed Phase 1: The Honesty Test. Initializing PAAPS Entry Interview...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             SCREEN 3: PAAPS ENTRY - QUESTION 1 (DETECTIVE CAT)
+             =============================================================== -->
+        <section id="screen-3" class="game-screen">
+            <div class="sticker-card mint-theme">
+                <div class="question-cat-header">
+                    <div class="question-cat-avatar">
+                        <img src="assets/cat_detective.jpg" alt="Detective Sherlock Cat">
+                    </div>
+                    <div class="question-header-text">
+                        <div class="card-badge">🏆 PAAPS VERIFICATION • QUESTION 1</div>
+                        <h1 class="card-title">What is Sankalp's real name? 🧐</h1>
+                    </div>
+                </div>
+
+                <p class="card-subtitle">Detective Cat is investigating! Only true insiders know the certified identity:</p>
+
+                <div class="slider-container">
+                    <div class="slider-deck four-deck">
+                        <div class="choice-card" data-value="Sankalp">
+                            <div class="choice-card-icon">👑</div>
+                            <div class="choice-badge">OPTION A</div>
+                            <div class="choice-text">Sankalp</div>
+                        </div>
+
+                        <div class="choice-card" data-value="Sanki">
+                            <div class="choice-card-icon">⚡</div>
+                            <div class="choice-badge">OPTION B</div>
+                            <div class="choice-text">Sanki</div>
+                        </div>
+
+                        <div class="choice-card" data-value="Saputa">
+                            <div class="choice-card-icon">🐍</div>
+                            <div class="choice-badge">OPTION C</div>
+                            <div class="choice-text">Saputa</div>
+                        </div>
+
+                        <div class="choice-card" data-value="Sankulan">
+                            <div class="choice-card-icon">🏛️</div>
+                            <div class="choice-badge">OPTION D</div>
+                            <div class="choice-text">Sankulan</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             SCREEN 4: PAAPS ENTRY - QUESTION 2 (SNEAKY RUNNER CAT)
+             =============================================================== -->
+        <section id="screen-4" class="game-screen">
+            <div class="sticker-card yellow-theme">
+                <div class="question-cat-header">
+                    <div class="question-cat-avatar">
+                        <img src="assets/kitten.jpg" alt="Sneaky Runner Cat">
+                    </div>
+                    <div class="question-header-text">
+                        <div class="card-badge">🚪 PAAPS VERIFICATION • QUESTION 2</div>
+                        <h1 class="card-title">Most ready one to leave the group? 💨</h1>
+                    </div>
+                </div>
+
+                <p class="card-subtitle">Finger constantly hovering right over the 'Exit Group' button:</p>
+
+                <div class="slider-container">
+                    <div class="slider-deck">
+                        <div class="choice-card" data-value="Prashita">
+                            <div class="choice-card-icon">💅</div>
+                            <div class="choice-badge">CANDIDATE 1</div>
+                            <div class="choice-text">Prashita</div>
+                        </div>
+
+                        <div class="choice-card" data-value="Pranjali">
+                            <div class="choice-card-icon">🏃‍♀️</div>
+                            <div class="choice-badge">CANDIDATE 2</div>
+                            <div class="choice-text">Pranjali</div>
+                        </div>
+
+                        <div class="choice-card" data-value="Shreeya">
+                            <div class="choice-card-icon">🚪</div>
+                            <div class="choice-badge">CANDIDATE 3</div>
+                            <div class="choice-text">Shreeya</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             SCREEN 5: PAAPS ENTRY - QUESTION 3 (CUDDLE CATS)
+             =============================================================== -->
+        <section id="screen-5" class="game-screen">
+            <div class="sticker-card lavender-theme">
+                <div class="question-cat-header">
+                    <div class="question-cat-avatar">
+                        <img src="assets/cat_cuddle.jpg" alt="Two Cuddle Cats">
+                    </div>
+                    <div class="question-header-text">
+                        <div class="card-badge">💖 PAAPS VERIFICATION • QUESTION 3</div>
+                        <h1 class="card-title">Gay couple of the group? 👬✨</h1>
+                    </div>
+                </div>
+
+                <p class="card-subtitle">Unmatched romantic tension and dynamic brotherly chemistry:</p>
+
+                <div class="slider-container">
+                    <div class="slider-deck">
+                        <div class="choice-card" data-value="Ankan and Shubhank">
+                            <div class="choice-card-icon">🤝</div>
+                            <div class="choice-badge">DUO 1</div>
+                            <div class="choice-text">Ankan and Shubhank</div>
+                        </div>
+
+                        <div class="choice-card" data-value="Anjee and Ankan">
+                            <div class="choice-card-icon">🔥</div>
+                            <div class="choice-badge">DUO 2</div>
+                            <div class="choice-text">Anjee and Ankan</div>
+                        </div>
+
+                        <div class="choice-card" data-value="Anjee and Shubhank">
+                            <div class="choice-card-icon">💘</div>
+                            <div class="choice-badge">DUO 3</div>
+                            <div class="choice-text">Anjee and Shubhank</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             SCREEN 6: PAAPS ENTRY - QUESTION 4 (WALL STREET BUSINESS CAT)
+             =============================================================== -->
+        <section id="screen-6" class="game-screen">
+            <div class="sticker-card mint-theme">
+                <div class="question-cat-header">
+                    <div class="question-cat-avatar">
+                        <img src="assets/cat_business.jpg" alt="Wall Street Trader Cat">
+                    </div>
+                    <div class="question-header-text">
+                        <div class="card-badge">📊 PAAPS VERIFICATION • QUESTION 4</div>
+                        <h1 class="card-title">"how is market goin" ka matlab kya hai? 📉📈</h1>
+                    </div>
+                </div>
+
+                <p class="card-subtitle">Business Cat is analyzing the charts! What are they really asking?</p>
+
+                <div class="slider-container">
+                    <div class="slider-deck four-deck">
+                        <div class="choice-card" data-value="Ankan Relationship Status">
+                            <div class="choice-card-icon">💔</div>
+                            <div class="choice-badge">THEORY A</div>
+                            <div class="choice-text">Ankan Relationship Status</div>
+                        </div>
+
+                        <div class="choice-card" data-value="Portfolio of Ankan">
+                            <div class="choice-card-icon">💼</div>
+                            <div class="choice-badge">THEORY B</div>
+                            <div class="choice-text">Portfolio of Ankan</div>
+                        </div>
+
+                        <div class="choice-card" data-value="Market value">
+                            <div class="choice-card-icon">💹</div>
+                            <div class="choice-badge">THEORY C</div>
+                            <div class="choice-text">Market value</div>
+                        </div>
+
+                        <div class="choice-card" data-value="Assignments submitted">
+                            <div class="choice-card-icon">📚</div>
+                            <div class="choice-badge">THEORY D</div>
+                            <div class="choice-text">Assignments submitted</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             SCREEN 7: PAAPS ENTRY - QUESTION 5 (TEA CAT)
+             =============================================================== -->
+        <section id="screen-7" class="game-screen">
+            <div class="sticker-card yellow-theme">
+                <div class="question-cat-header">
+                    <div class="question-cat-avatar">
+                        <img src="assets/cat_tea.jpg" alt="Tea Spilling Fluffy Cat">
+                    </div>
+                    <div class="question-header-text">
+                        <div class="card-badge">☕ PAAPS VERIFICATION • QUESTION 5</div>
+                        <h1 class="card-title">Best Tea Giver ☕🫖</h1>
+                    </div>
+                </div>
+
+                <p class="card-subtitle">Tea Cat has brewed a hot cup! Who serves the spiciest campus gossip?</p>
+
+                <div class="slider-container">
+                    <div class="slider-deck four-deck">
+                        <div class="choice-card" data-value="Shreeya">
+                            <div class="choice-card-icon">🍵</div>
+                            <div class="choice-badge">HOT BREW 1</div>
+                            <div class="choice-text">Shreeya</div>
+                        </div>
+
+                        <div class="choice-card" data-value="Shubhank">
+                            <div class="choice-card-icon">☕</div>
+                            <div class="choice-badge">HOT BREW 2</div>
+                            <div class="choice-text">Shubhank</div>
+                        </div>
+
+                        <div class="choice-card" data-value="Ankan">
+                            <div class="choice-card-icon">🔥</div>
+                            <div class="choice-badge">HOT BREW 3</div>
+                            <div class="choice-text">Ankan</div>
+                        </div>
+
+                        <div class="choice-card" data-value="Prashita">
+                            <div class="choice-card-icon">🫖</div>
+                            <div class="choice-badge">HOT BREW 4</div>
+                            <div class="choice-text">Prashita</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             SCREEN 8: CAMPUS LOYALTY CHECK (ROYAL CROWN CAT)
+             =============================================================== -->
+        <section id="screen-8" class="game-screen">
+            <div class="sticker-card mint-theme">
+                <div class="question-cat-header">
+                    <div class="question-cat-avatar">
+                        <img src="assets/cat_crown.jpg" alt="Royal King Crown Cat">
+                    </div>
+                    <div class="question-header-text">
+                        <div class="card-badge">👑 CRUCIAL CAMPUS TEST • THE ONE TRUE CHOICE</div>
+                        <h1 class="card-title">What is universally known as the BEST club of college? 🌟</h1>
+                    </div>
+                </div>
+
+                <p class="card-subtitle">Royal King Cat demands the truth! Your reputation and bunk pass depend on this:</p>
+
+                <div class="slider-container">
+                    <div class="slider-deck">
+                        <!-- Events comm (The ONLY right answer!) -->
+                        <div id="cardEventsComm" class="choice-card events-comm-card" data-value="Events comm">
+                            <div class="crown-badge">👑 SUPREME WINNER</div>
+                            <div class="choice-card-icon" style="font-size: 3.4rem;">🎪</div>
+                            <div class="choice-badge" style="background: #FFE8A3; color: #7A5300;">THE GOLD STANDARD</div>
+                            <div class="choice-text" style="font-size: 1.2rem; font-weight: 800; color: #523800;">
+                                Events comm ✨
+                            </div>
+                            <div style="font-size: 0.85rem; color: #8A6400; margin-top: 6px; font-weight: 600;">
+                                The undisputed GOAT of campus life!
+                            </div>
+                        </div>
+
+                        <!-- BPR (Wrong choice - evasive/buzzer!) -->
+                        <div id="cardBPR" class="choice-card" data-value="BPR">
+                            <div class="choice-card-icon">🙅‍♂️</div>
+                            <div class="choice-badge">ALTERNATIVE</div>
+                            <div class="choice-text">BPR</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">
+                                (Are you really sure? Think again...)
+                            </div>
+                        </div>
+
+                        <!-- Other (Wrong choice - evasive/buzzer!) -->
+                        <div id="cardOther" class="choice-card" data-value="Other">
+                            <div class="choice-card-icon">❌</div>
+                            <div class="choice-badge">ALTERNATIVE</div>
+                            <div class="choice-text">Other clubs</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">
+                                (Nice try, but false!)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             SCREEN REJECT: APPLICATION DENIED (AUDITOR CAT)
+             =============================================================== -->
+        <section id="screen-reject" class="game-screen">
+            <div class="sticker-card reject-card">
+                <div class="reject-stamp">RESEARCH FAILED ❌</div>
+
+                <div class="question-cat-header">
+                    <div class="question-cat-avatar">
+                        <img src="assets/cat_business.jpg" alt="Strict Auditor Cat">
+                    </div>
+                    <div class="question-header-text">
+                        <div class="card-badge" style="background: #EF476F; color: #FFFFFF;">
+                            🚫 ADMISSION DENIED
+                        </div>
+                        <h1 class="card-title" style="color: #EF476F;">
+                            Not enough research you have done! 🙅‍♂️
+                        </h1>
+                    </div>
+                </div>
+
+                <p class="card-subtitle" style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">
+                    "Go and learn more, then apply in the next opening... 📜💀"
+                </p>
+
+                <!-- Score breakdown pills -->
+                <div class="score-badge-pills" id="scoreBreakdownPills">
+                    <!-- Injected dynamically -->
+                </div>
+
+                <div style="background: rgba(255, 255, 255, 0.6); padding: 16px 22px; border-radius: 20px; margin-bottom: 22px;">
+                    <p style="font-weight: 600; font-size: 0.98rem; color: var(--text-muted);">
+                        ⚠️ <strong>PAAPS High Council Verdict:</strong> You failed the sacred squad lore check. No official bunk pass can be issued today! Study with the squad and come back prepared.
+                    </p>
+                </div>
+
+                <button id="btnRetryInterview" class="btn-fun" style="background: #EF476F; color: #FFFFFF; box-shadow: 0 8px 0 #B5173F;">
+                    <span>🔄</span>
+                    <span>Re-take Interview & Study Lore</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             SCREEN 9: OFFICIAL PAAPS MEMBER CARD / RECEIPT BADGE (SUCCESS 6/6!)
+             =============================================================== -->
+        <section id="screen-9" class="game-screen">
+            <div class="badge-screen-container">
+                <div class="card-badge" style="margin-bottom: 14px; background: #FFD166; color: #523800;">
+                    🎊 OFFICIAL PASS GENERATED & LOADED
+                </div>
+
+                <!-- Digital Holographic Receipt Card -->
+                <div class="receipt-badge-card" id="memberPassCard">
+                    <!-- Stamps -->
+                    <div class="badge-stamp">CERTIFIED BUNKER</div>
+                    <div class="stamp-events-comm">EVENTS COMM APPROVED ⭐</div>
+
+                    <div class="badge-header">
+                        <div class="badge-logo">★ PAAPS BUNK CLUB ★</div>
+                        <div class="badge-sub">Official Lifetime Membership Receipt</div>
+                    </div>
+
+                    <div class="badge-grid">
+                        <div class="badge-field full-span">
+                            <div class="field-label">Official Registered Name</div>
+                            <div class="user-mixed-name">
+                                <span id="badgeUserName">Sankulan's Co-Pilot</span>
+                                <button id="btnChangeName" class="reroll-btn" title="Change name">✏️ Edit</button>
+                            </div>
+                        </div>
+
+                        <div class="badge-field">
+                            <div class="field-label">Member ID</div>
+                            <div class="field-value" id="badgeMemberId">PAAPS-BUNK-7731</div>
+                        </div>
+
+                        <div class="badge-field">
+                            <div class="field-label">Issue Date</div>
+                            <div class="field-value" id="badgeDate">Sept 28, 2026</div>
+                        </div>
+
+                        <div class="badge-field full-span">
+                            <div class="field-label">Specialist Role</div>
+                            <div class="field-value" id="badgeRole" style="color: var(--accent-purple);">Past-Life Soulmate & Lore Master 👑</div>
+                        </div>
+
+                        <div class="badge-field full-span">
+                            <div class="field-label">Campus Allegiance</div>
+                            <div class="field-value highlight-gold" id="badgeClub">
+                                <span>👑</span>
+                                <span>Events comm (The Only Best Club)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Barcode Area -->
+                    <div class="barcode-area">
+                        <svg class="barcode-svg" viewBox="0 0 260 48">
+                            <rect x="0" y="0" width="4" height="48" fill="#2D223B"/>
+                            <rect x="8" y="0" width="8" height="48" fill="#2D223B"/>
+                            <rect x="20" y="0" width="3" height="48" fill="#2D223B"/>
+                            <rect x="28" y="0" width="10" height="48" fill="#2D223B"/>
+                            <rect x="44" y="0" width="4" height="48" fill="#2D223B"/>
+                            <rect x="54" y="0" width="6" height="48" fill="#2D223B"/>
+                            <rect x="66" y="0" width="12" height="48" fill="#2D223B"/>
+                            <rect x="84" y="0" width="4" height="48" fill="#2D223B"/>
+                            <rect x="94" y="0" width="8" height="48" fill="#2D223B"/>
+                            <rect x="108" y="0" width="3" height="48" fill="#2D223B"/>
+                            <rect x="116" y="0" width="14" height="48" fill="#2D223B"/>
+                            <rect x="136" y="0" width="4" height="48" fill="#2D223B"/>
+                            <rect x="146" y="0" width="8" height="48" fill="#2D223B"/>
+                            <rect x="160" y="0" width="5" height="48" fill="#2D223B"/>
+                            <rect x="172" y="0" width="10" height="48" fill="#2D223B"/>
+                            <rect x="188" y="0" width="4" height="48" fill="#2D223B"/>
+                            <rect x="198" y="0" width="12" height="48" fill="#2D223B"/>
+                            <rect x="216" y="0" width="4" height="48" fill="#2D223B"/>
+                            <rect x="226" y="0" width="6" height="48" fill="#2D223B"/>
+                            <rect x="238" y="0" width="8" height="48" fill="#2D223B"/>
+                            <rect x="252" y="0" width="4" height="48" fill="#2D223B"/>
+                        </svg>
+                        <div class="barcode-num">* PAAPS-EVENTS-COMM-2026 *</div>
+                    </div>
+                </div>
+
+                <!-- Final Action Buttons -->
+                <div class="btn-group" style="margin-top: 25px;">
+                    <button id="downloadBadgeBtn" class="btn-fun" style="background: #2EC4B6; color: #FFFFFF; box-shadow: 0 8px 0 #1B8A80;">
+                        <span>💾</span>
+                        <span>Download Member Pass</span>
+                    </button>
+                    <button id="restartBtn" class="btn-fun" style="background: var(--card-bg-white); color: var(--accent-purple); border-color: var(--border-color);">
+                        <span>🔄</span>
+                        <span>Play Again</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===============================================================
+         DRAMATIC "PAST LIVES" SUCCESS MODAL (6/6 CORRECT!)
+         =============================================================== -->
+    <div id="pastLivesModal" class="modal-overlay">
+        <div class="past-lives-modal-card">
+            <div style="font-size: 3.5rem; margin-bottom: 8px;">😭✨💖</div>
+            <h2 class="past-lives-headline">
+                OH GOD! I guess we know each other from our past lives?! 😭✨
+            </h2>
+            <p class="past-lives-sub">
+                "Kaha the aap abb tak??!! 💖✨"
+            </p>
+            <p style="font-weight: 600; color: var(--text-muted); font-size: 1.05rem; line-height: 1.4;">
+                You answered every single insider question with 100% perfection! You are officially one of us.
+            </p>
+
+            <div class="name-prompt-box">
+                <label for="customUserNameInput" class="name-prompt-label">
+                    ✨ What name do you want to be called as on your official PAAPS pass?
+                </label>
+                <input type="text" id="customUserNameInput" class="name-input-field" placeholder="Enter your nickname here" value="sAnKuLaN_cO_pIlOt" maxlength="32">
+                
+                <label class="name-caps-toggle">
+                    <input type="checkbox" id="mixedCapsCheckbox" checked>
+                    <span>Apply quirky mixed small & long caps format?</span>
+                </label>
+            </div>
+
+            <button id="btnConfirmNameAndPass" class="btn-fun" style="background: linear-gradient(135deg, #FF6B8B, #8B5CF6); color: #FFFFFF; box-shadow: 0 8px 0 #6D28D9; font-size: 1.35rem; padding: 16px 42px;">
+                <span>🚀</span>
+                <span>Claim My Official Entry Pass!</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Sound & Application Logic -->
+    <script src="sound.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
